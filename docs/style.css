@@ -1,6 +1,5 @@
 body{
-    background-color: lightgrey;
-    text-decoration: none;
+    background-image: url(image/back.jpg);
 }
 
 header{
@@ -23,11 +22,12 @@ header{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px;
+    margin: 5px;
+    border-radius: 20%;
 }
 .box2 {
-    width: 300px;
-    height: 200px;
+    width: 250px;
+    height: 150px;
     background-color: black;
     display: flex;
     justify-content: center;
