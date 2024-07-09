@@ -6,20 +6,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style.css">
     <title>森のシーン</title>
+    <style>
+     
+        .canvas {
+            width: 98%; /* 画面の80%に設定 */
+            height: 400px;
+            background-color: white;
+            position: relative;
+        }
+        .image-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .image-item {
+            position: absolute;
+            cursor: grab;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        button {
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+    var offsetX;
+    var offsetY;
+    var imageCount = 0;
+    var obj = null;
+
+    function doInit() {
+        document.onmousemove = onMouseMove;
+        document.onmouseup = onMouseUp;
+    }
+
+    function onMouseDown(e) {
+        obj = this;
+        offsetX = e.pageX - parseInt(this.style.left);
+        offsetY = e.pageY - parseInt(this.style.top);
+        return false;
+    }
+
+    function onMouseMove(e) {
+        if (obj) {
+            obj.style.left = e.pageX - offsetX + 'px';
+            obj.style.top = e.pageY - offsetY + 'px';
+            return false;
+        }
+    }
+
+    function onMouseUp(e) {
+        obj = null;
+    }
+
+    function showImages(type) {
+        var container = document.getElementById(type + "-container");
+        var newImage = document.createElement("div");
+        newImage.className = "image-item";
+        newImage.style.top = "50%";
+        newImage.style.left = "50%";
+        newImage.style.transform = "translate(-50%, -50%)";
+        newImage.innerHTML = `
+            <img src="../image/${type}.png" width="80" height="80" alt="${type}">
+        `;
+        newImage.onmousedown = onMouseDown;
+        container.appendChild(newImage);
+        imageCount++;
+    }
+
+    window.addEventListener("load", function() {
+        doInit();
+    });
+    </script>
 </head>
 <body>
     <header>
-        <a href="../index.html"><img src="../image/logo.png" alt="象形文字で遊ぼう" width="300px" height="auto">
-        </a>
+        <a href="../index.html"><img src="../image/logo.png" alt="象形文字で遊ぼう" width="300px" height="auto"></a>
     </header>
     <main>
-       森の場面
-    <a href="../index.html">戻る</a>
+        <div class="canvas" id="canvas">
+            <div class="image-container" id="yama-container">
+                <!-- ここにやまの画像が追加されます -->
+            </div>
+            <div class="image-container" id="kawa-container">
+                <!-- ここにかわの画像が追加されます -->
+            </div>
+        </div>
+        <div class="button-container">
+            <button onclick="showImages('yama')">やま</button>
+            <button onclick="showImages('kawa')">かわ</button>
+        </div>
+        <a href="../index.html">←TOPページへ戻る</a>
     </main>
-
     <footer>
         <div>created by Takesako honoka</div>
     </footer>
-    
 </body>
 </html>
+
+
+
+
+
+
