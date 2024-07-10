@@ -7,9 +7,8 @@
     <link rel="stylesheet" href="../style.css">
     <title>森のシーン</title>
     <style>
-     
         .canvas {
-            width: 98%; /* 画面の80%に設定 */
+            width: 98%; 
             height: 400px;
             background-color: white;
             position: relative;
@@ -38,7 +37,7 @@
     var offsetX;
     var offsetY;
     var imageCount = 0;
-    var obj = null;
+    var selectedImage = null;
 
     function doInit() {
         document.onmousemove = onMouseMove;
@@ -46,22 +45,22 @@
     }
 
     function onMouseDown(e) {
-        obj = this;
+        selectedImage = this;
         offsetX = e.pageX - parseInt(this.style.left);
         offsetY = e.pageY - parseInt(this.style.top);
         return false;
     }
 
     function onMouseMove(e) {
-        if (obj) {
-            obj.style.left = e.pageX - offsetX + 'px';
-            obj.style.top = e.pageY - offsetY + 'px';
+        if (selectedImage) {
+            selectedImage.style.left = e.pageX - offsetX + 'px';
+            selectedImage.style.top = e.pageY - offsetY + 'px';
             return false;
         }
     }
 
     function onMouseUp(e) {
-        obj = null;
+        selectedImage = null;
     }
 
     function showImages(type) {
@@ -81,6 +80,16 @@
 
     window.addEventListener("load", function() {
         doInit();
+
+        // バーの変更に応じて画像のサイズを変更する
+        document.getElementById("RESIZE").addEventListener("input", function () {
+            var scale = this.value / 100;
+            if (selectedImage) {
+                var img = selectedImage.querySelector("img");
+                img.style.transform = `scale(${scale})`;
+                document.getElementById("SCALE").textContent = this.value + "%";
+            }
+        });
     });
     </script>
 </head>
@@ -101,6 +110,10 @@
             <button onclick="showImages('yama')">やま</button>
             <button onclick="showImages('kawa')">かわ</button>
         </div>
+        <div style="text-align:center;">
+            <p>倍率：<span id="SCALE">100%</span></p>
+            <input id="RESIZE" type="range" min="20" max="200" value="100" style="width:300px;">
+        </div>
         <a href="../index.html">←TOPページへ戻る</a>
     </main>
     <footer>
@@ -108,6 +121,9 @@
     </footer>
 </body>
 </html>
+
+
+
 
 
 
