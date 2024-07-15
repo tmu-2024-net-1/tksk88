@@ -6,37 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style.css">
     <title>森のシーン</title>
-    <style>
-        .canvas {
-            width: 98%; 
-            height: 400px;
-            background-color: white;
-            position: relative;
-        }
-        .image-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .image-item {
-            position: absolute;
-            cursor: grab;
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            margin: 10px 0;
-        }
-        button {
-            display: block;
-            margin: 10px 0;
-        }
-    </style>
     <script>
     var offsetX;
     var offsetY;
-    var imageCount = 0;
     var selectedImage = null;
 
     function doInit() {
@@ -45,26 +17,42 @@
     }
 
     function onMouseDown(e) {
+        if (selectedImage) {
+            selectedImage.style.opacity = 1; // 以前の選択を元に戻す
+        }
         selectedImage = this;
+        selectedImage.style.opacity = 0.5; // 選択された画像を薄くする
         offsetX = e.pageX - parseInt(this.style.left);
         offsetY = e.pageY - parseInt(this.style.top);
+
+        // 対応するスライダーをアクティブにする
+        activateSliders(this);
+
         return false;
     }
 
     function onMouseMove(e) {
         if (selectedImage) {
-            selectedImage.style.left = e.pageX - offsetX + 'px';
-            selectedImage.style.top = e.pageY - offsetY + 'px';
+            var newX = e.pageX - offsetX;
+            var newY = e.pageY - offsetY;
+
+            selectedImage.style.left = newX + 'px';
+            selectedImage.style.top = newY + 'px';
+
             return false;
         }
     }
 
     function onMouseUp(e) {
+        if (selectedImage) {
+            selectedImage.style.opacity = 1; // 選択解除時に元に戻す
+        }
         selectedImage = null;
     }
 
     function showImages(type) {
         var container = document.getElementById(type + "-container");
+        container.innerHTML = ''; // 既存の画像をクリア
         var newImage = document.createElement("div");
         newImage.className = "image-item";
         newImage.style.top = "50%";
@@ -75,21 +63,43 @@
         `;
         newImage.onmousedown = onMouseDown;
         container.appendChild(newImage);
-        imageCount++;
+
+        // スライダーの初期化
+        var resizeSlider = document.getElementById(type + "-resize");
+        var rotateSlider = document.getElementById(type + "-rotate");
+        resizeSlider.value = 100;
+        rotateSlider.value = 0;
+        document.getElementById(type + "-scale").textContent = "100%";
+        document.getElementById(type + "-rotation").textContent = "0°";
+
+        // 対応するスライダーをアクティブにする
+        activateSliders(newImage);
+    }
+
+    function activateSliders(image) {
+        var type = image.querySelector("img").alt;
+
+        // スライダーのイベントリスナーを設定
+        var resizeSlider = document.getElementById(type + "-resize");
+        var rotateSlider = document.getElementById(type + "-rotate");
+
+        resizeSlider.oninput = function () {
+            var scale = this.value / 100;
+            var img = image.querySelector("img");
+            img.style.width = 80 * scale + 'px';
+            img.style.height = 80 * scale + 'px';
+            document.getElementById(type + "-scale").textContent = this.value + "%";
+        };
+
+        rotateSlider.oninput = function () {
+            var rotation = this.value;
+            image.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+            document.getElementById(type + "-rotation").textContent = rotation + "°";
+        };
     }
 
     window.addEventListener("load", function() {
         doInit();
-
-        // バーの変更に応じて画像のサイズを変更する
-        document.getElementById("RESIZE").addEventListener("input", function () {
-            var scale = this.value / 100;
-            if (selectedImage) {
-                var img = selectedImage.querySelector("img");
-                img.style.transform = `scale(${scale})`;
-                document.getElementById("SCALE").textContent = this.value + "%";
-            }
-        });
     });
     </script>
 </head>
@@ -100,19 +110,27 @@
     <main>
         <div class="canvas" id="canvas">
             <div class="image-container" id="yama-container">
-                <!-- ここにやまの画像が追加されます -->
             </div>
             <div class="image-container" id="kawa-container">
-                <!-- ここにかわの画像が追加されます -->
             </div>
         </div>
         <div class="button-container">
             <button onclick="showImages('yama')">やま</button>
             <button onclick="showImages('kawa')">かわ</button>
         </div>
-        <div style="text-align:center;">
-            <p>倍率：<span id="SCALE">100%</span></p>
-            <input id="RESIZE" type="range" min="20" max="200" value="100" style="width:300px;">
+        <div class="slider-container">
+            <div id="yama-sliders" class="sliders">
+                <p>やま倍率：<span id="yama-scale">100%</span></p>
+                <input id="yama-resize" type="range" min="20" max="300" value="100" style="width:240px;">
+                <p>やま回転：<span id="yama-rotation">0°</span></p>
+                <input id="yama-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+            </div>
+            <div id="kawa-sliders" class="sliders">
+                <p>かわ倍率：<span id="kawa-scale">100%</span></p>
+                <input id="kawa-resize" type="range" min="20" max="300" value="100" style="width:240px;">
+                <p>かわ回転：<span id="kawa-rotation">0°</span></p>
+                <input id="kawa-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+            </div>
         </div>
         <a href="../index.html">←TOPページへ戻る</a>
     </main>
@@ -121,6 +139,43 @@
     </footer>
 </body>
 </html>
+
+<style>
+.image-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.image-item {
+    position: absolute;
+    cursor: grab;
+    opacity: 1;
+    transition: opacity 0.2s; /* 画像の薄さをスムーズに変更 */
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    gap: 10px; /* ボタンの間隔を設定 */
+}
+button {
+    display: block;
+    background-color: lightcyan;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: none;
+    transition: transform 0.2s;
+}
+button:hover {
+    transform: scale(1.1);
+}
+.sliders {
+    text-align: center;
+    margin: 10px;
+}
+</style>
 
 
 
