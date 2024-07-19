@@ -6,36 +6,223 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>象形文字で遊ぼう</title>
+    <style>
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .button-group {
+            display: none;
+            flex-direction: row;
+            gap: 10px;
+        }
+        .button-group.active {
+            display: flex;
+        }
+    </style>
+    <script>
+    var offsetX;
+    var offsetY;
+    var selectedImage = null;
+    var currentGroup = 0;
+    var buttonGroups;
+
+    function doInit() {
+        document.onmousemove = onMouseMove;
+        document.onmouseup = onMouseUp;
+        buttonGroups = document.querySelectorAll('.button-group');
+        showButtonGroup(currentGroup);
+    }
+
+    function showButtonGroup(index) {
+        buttonGroups.forEach((group, i) => {
+            group.classList.toggle('active', i === index);
+        });
+        document.getElementById('prevButton').style.display = index === 0 ? 'none' : 'inline-block';
+        document.getElementById('nextButton').style.display = index === buttonGroups.length - 1 ? 'none' : 'inline-block';
+    }
+
+    function nextGroup() {
+        if (currentGroup < buttonGroups.length - 1) {
+            currentGroup++;
+            showButtonGroup(currentGroup);
+        }
+    }
+
+    function prevGroup() {
+        if (currentGroup > 0) {
+            currentGroup--;
+            showButtonGroup(currentGroup);
+        }
+    }
+
+    function onMouseDown(e) {
+        if (selectedImage) {
+            selectedImage.style.opacity = 1; // 以前の選択を元に戻す
+        }
+        selectedImage = this;
+        selectedImage.style.opacity = 0.5; // 選択された画像を薄くする
+        offsetX = e.pageX - parseInt(this.style.left);
+        offsetY = e.pageY - parseInt(this.style.top);
+
+        // 対応するスライダーをアクティブにする
+        activateSliders(this);
+
+        return false;
+    }
+
+    function onMouseMove(e) {
+        if (selectedImage) {
+            var newX = e.pageX - offsetX;
+            var newY = e.pageY - offsetY;
+
+            selectedImage.style.left = newX + 'px';
+            selectedImage.style.top = newY + 'px';
+
+            return false;
+        }
+    }
+
+    function onMouseUp(e) {
+        if (selectedImage) {
+            selectedImage.style.opacity = 1; // 選択解除時に元に戻す
+        }
+        selectedImage = null;
+    }
+
+    function showImages(type) {
+        var container = document.getElementById(type + "-container");
+        container.innerHTML = ''; 
+        var newImage = document.createElement("div");
+        newImage.className = "image-item";
+        newImage.style.top = "50%";
+        newImage.style.left = "50%";
+        newImage.style.transform = "translate(-50%, -50%)";
+        newImage.innerHTML = `
+            <img src="image/${type}.png" width="80" height="80" alt="${type}">
+        `;
+        newImage.onmousedown = onMouseDown;
+        container.appendChild(newImage);
+
+        var resizeXSlider = document.getElementById(type + "-resize-x");
+        var resizeYSlider = document.getElementById(type + "-resize-y");
+        var rotateSlider = document.getElementById(type + "-rotate");
+        resizeXSlider.value = 100;
+        resizeYSlider.value = 100;
+        rotateSlider.value = 0;
+        document.getElementById(type + "-scale-x").textContent = "100%";
+        document.getElementById(type + "-scale-y").textContent = "100%";
+        document.getElementById(type + "-rotation").textContent = "0°";
+
+        activateSliders(newImage);
+    }
+
+    function activateSliders(image) {
+        var type = image.querySelector("img").alt;
+
+        // スライダーのイベントリスナーを設定
+        var resizeXSlider = document.getElementById(type + "-resize-x");
+        var resizeYSlider = document.getElementById(type + "-resize-y");
+        var rotateSlider = document.getElementById(type + "-rotate");
+
+        resizeXSlider.oninput = function () {
+            var scaleX = this.value / 100;
+            var img = image.querySelector("img");
+            img.style.width = 80 * scaleX + 'px';
+            document.getElementById(type + "-scale-x").textContent = this.value + "%";
+        };
+
+        resizeYSlider.oninput = function () {
+            var scaleY = this.value / 100;
+            var img = image.querySelector("img");
+            img.style.height = 80 * scaleY + 'px';
+            document.getElementById(type + "-scale-y").textContent = this.value + "%";
+        };
+
+        rotateSlider.oninput = function () {
+            var rotation = this.value;
+            image.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+            document.getElementById(type + "-rotation").textContent = rotation + "°";
+        };
+    }
+
+    window.addEventListener("load", function() {
+        doInit();
+    });
+    </script>
 </head>
 <body>
     <header>
-        <a href="index.html"><img src="image/logo.png" alt="象形文字で遊ぼう" width="300px" height="auto">
-        </a>
+        <a href="index.html"><img src="image/logo.png" alt="象形文字で遊ぼう" width="300px" height="auto"></a>
     </header>
     <main>
-        <div class="container">
-            <a href="mori/index.html"><div class="box">もり</div></a>
-            <a href="umi/index.html"><div class="box">うみ</div></a>
-            <a href="tosi/index.html"><div class="box">とし</div></a>
+        <div class="canvas" id="canvas">
+            <img src="image/canvas.jpg" width="800px" height="400px">
+            <div class="image-container" id="yama-container">
+            </div>
+            <div class="image-container" id="kawa-container">
+            </div>
+            <div class="image-container" id="ki-container">
+            </div>
         </div>
-        <p style="text-align: center;">
-            作品集
-        </p>
-
-        <div class="container">
-            <div class="box2"></div>
-            <div class="box2"></div>
-            <div class="box2"></div>
-            <div class="box2"></div>
-            <div class="box2"></div>
-            <div class="box2"></div>
-
+        <div class="control-container">
+            <div class="button-container">
+                <button id="prevButton" onclick="prevGroup()">前へ</button>
+                <div class="button-group">
+                    <button onclick="showImages('yama')">やま</button>
+                    <button onclick="showImages('kawa')">かわ</button>
+                    <button onclick="showImages('ki')">き</button>
+                </div>
+                <div class="button-group">
+                    <button onclick="showImages('yama')">かわ</button>
+                    <button onclick="showImages('kawa')">き</button>
+                    <button onclick="showImages('ki')">やま</button>
+                </div>
+                <div class="button-group">
+                    <button onclick="showImages('yama')">き</button>
+                    <button onclick="showImages('kawa')">やま</button>
+                    <button onclick="showImages('ki')">かわ</button>
+                </div>
+                <button id="nextButton" onclick="nextGroup()">次へ</button>
+            </div>
+            <div class="slider-container">
+                <div id="yama-sliders" class="sliders">
+                    <p>やま倍率（横）：<span id="yama-scale-x">100%</span></p>
+                    <input id="yama-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>やま倍率（縦）：<span id="yama-scale-y">100%</span></p>
+                    <input id="yama-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>やま回転：<span id="yama-rotation">0°</span></p>
+                    <input id="yama-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                </div>
+                <div id="kawa-sliders" class="sliders">
+                    <p>かわ倍率（横）：<span id="kawa-scale-x">100%</span></p>
+                    <input id="kawa-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>かわ倍率（縦）：<span id="kawa-scale-y">100%</span></p>
+                    <input id="kawa-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>かわ回転：<span id="kawa-rotation">0°</span></p>
+                    <input id="kawa-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                </div>
+                <div id="ki-sliders" class="sliders">
+                    <p>き倍率（横）：<span id="ki-scale-x">100%</span></p>
+                    <input id="ki-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>き倍率（縦）：<span id="ki-scale-y">100%</span></p>
+                    <input id="ki-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>き回転：<span id="ki-rotation">0°</span></p>
+                    <input id="ki-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                </div>
+            </div>
         </div>
     </main>
-
     <footer>
-        <div>created by Takesako honoka</div>
+       <img src="image/name.png" alt="作：たけさこほのか" width="150px" height="auto"></a>
     </footer>
-    
 </body>
 </html>
+
+
+
+
+
+
