@@ -6,269 +6,264 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>象形文字で遊ぼう</title>
-    <style>
-   .header-container {
-    display: flex;
-    justify-content: space-between; /* ボタンを左右に配置 */
-    align-items: center;
-    width: 1000px; /* canvasの幅と合わせる */
-    margin: 0 auto; /* 中央に配置 */
-    margin-bottom: 10px; /* タイトルとキャンバス間のスペース */
-    position: relative; /* Relative positioning to help with absolute positioning */
-   }
 
-   .header-container button {
-    border: none;
-    background: transparent;
-   }
-
-    .header-container h1 {
-    margin: 0;
-    flex-grow: 1; /* 空きスペースを埋める */
-    text-align: center; /* タイトルを中央に配置 */
-    position: absolute; /* Absolute positioning to keep it centered */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Adjust to ensure it is centered */
-    }
-
-    .header-container button {
-    border: none;
-    background: transparent;
-}
-
-        .header-container button {
-            border: none;
-            background: transparent;
-        }
-        .canvas-container {
-            position: relative;
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px; /* Space between buttons and canvas */
-        }
-        .button-group {
-            display: none;
-            flex-direction: row;
-            gap: 10px;
-        }
-        .button-group.active {
-            display: flex;
-        }
-        #switch{
-            width: 300px;
-            height: 100px;
-            background: url(image/off.png) no-repeat;
-            background-size: 100% 100%;
-            cursor: pointer;
-        }
-       #light{
-            width: 140px;
-            height: 140px;
-            background: url(image/sakana.png) no-repeat;
-            background-size: 100% 100%;
-        }
-        #switch.on_switch{
-            background: url(image/on.png) no-repeat;
-            background-size: 100% 100%;
-        }
-       #light.on_light{
-           background: url(image/sakana.gif) no-repeat;
-           background-size: 100% 100%;
-        }
-    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    var offsetX;
-    var offsetY;
-    var selectedImage = null;
-    var currentGroup = 0;
-    var buttonGroups;
-    var titles = [
-        "背景画像を作ろう",
-        "動物を配置しよう",
-        "エフェクトを追加しよう"
-    ];
+        //ヘッダータイトル
+        var offsetX;
+        var offsetY;
+        var selectedImage = null;
+        var currentGroup = 0;
+        var buttonGroups;
+        var titles = [
+            "背景画像を作ろう",
+            "動物を配置しよう",
+            "エフェクトを追加しよう"
+        ];
 
-    function doInit() {
-        document.onmousemove = onMouseMove;
-        document.onmouseup = onMouseUp;
-        buttonGroups = document.querySelectorAll('.button-group');
-        showButtonGroup(currentGroup);
-        updateTitle(currentGroup);
+        function doInit() {
+            document.onmousemove = onMouseMove;
+            document.onmouseup = onMouseUp;
+            buttonGroups = document.querySelectorAll('.button-group');
+            showButtonGroup(currentGroup);
+            updateTitle(currentGroup);
 
-        const switchImg = document.getElementById("switch");
-    const lightImg = document.getElementById("light");
-    switchImg.addEventListener("click", changeImg);
-    if (switchImg && lightImg) {
-                switchImg.addEventListener("click", function() {
-                    switchImg.classList.toggle("on_switch");
-                    lightImg.classList.toggle("on_light");
-                });
+            const switchImg = document.getElementById("switch");
+            switchImg.addEventListener("click", changeImg);
+        }
+
+        function showButtonGroup(index) {
+            buttonGroups.forEach((group, i) => {
+                group.classList.toggle('active', i === index);
+            });
+            document.getElementById('prevButton').style.display = index === 0 ? 'none' : 'inline-block';
+            document.getElementById('nextButton').style.display = index === buttonGroups.length - 1 ? 'none' : 'inline-block';
+        }
+
+        function nextGroup() {
+            if (currentGroup < buttonGroups.length - 1) {
+                currentGroup++;
+                showButtonGroup(currentGroup);
+                updateTitle(currentGroup);
             }
-    }
-
-    function showButtonGroup(index) {
-        buttonGroups.forEach((group, i) => {
-            group.classList.toggle('active', i === index);
-        });
-        document.getElementById('prevButton').style.display = index === 0 ? 'none' : 'inline-block';
-        document.getElementById('nextButton').style.display = index === buttonGroups.length - 1 ? 'none' : 'inline-block';
-    }
-
-    function nextGroup() {
-        if (currentGroup < buttonGroups.length - 1) {
-            currentGroup++;
-            showButtonGroup(currentGroup);
-            updateTitle(currentGroup);
         }
-    }
 
-    function prevGroup() {
-        if (currentGroup > 0) {
-            currentGroup--;
-            showButtonGroup(currentGroup);
-            updateTitle(currentGroup);
+        function prevGroup() {
+            if (currentGroup > 0) {
+                currentGroup--;
+                showButtonGroup(currentGroup);
+                updateTitle(currentGroup);
+            }
         }
-    }
 
-    function updateTitle(index) {
-        document.getElementById('dynamic-title').textContent = titles[index];
-    }
-
-    function onMouseDown(e) {
-        if (selectedImage) {
-            selectedImage.style.opacity = 1; // 以前の選択を元に戻す
+        function updateTitle(index) {
+            document.getElementById('dynamic-title').textContent = titles[index];
         }
-        selectedImage = this;
-        selectedImage.style.opacity = 0.5; // 選択された画像を薄くする
-        offsetX = e.pageX - parseInt(this.style.left);
-        offsetY = e.pageY - parseInt(this.style.top);
 
-        // 対応するスライダーをアクティブにする
-        activateSliders(this);
+        function onMouseDown(e) {
+            if (selectedImage) {
+                selectedImage.style.opacity = 1; 
+            }
+            selectedImage = this;
+            selectedImage.style.opacity = 0.5; 
+            offsetX = e.pageX - parseInt(this.style.left);
+            offsetY = e.pageY - parseInt(this.style.top);
 
-        return false;
-    }
-
-    function onMouseMove(e) {
-        if (selectedImage) {
-            var newX = e.pageX - offsetX;
-            var newY = e.pageY - offsetY;
-
-            selectedImage.style.left = newX + 'px';
-            selectedImage.style.top = newY + 'px';
+            activateSliders(this);
 
             return false;
         }
-    }
 
-    function onMouseUp(e) {
-        if (selectedImage) {
-            selectedImage.style.opacity = 1; // 選択解除時に元に戻す
+        function onMouseMove(e) {
+            if (selectedImage) {
+                var newX = e.pageX - offsetX;
+                var newY = e.pageY - offsetY;
+
+                selectedImage.style.left = newX + 'px';
+                selectedImage.style.top = newY + 'px';
+
+                return false;
+            }
         }
-        selectedImage = null;
-    }
 
-    function showImages(type) {
-    var container = document.getElementById(type + "-container");
-    container.innerHTML = '';
-    var newImage = document.createElement("div");
-    newImage.className = "image-item";
-    newImage.style.top = "50%";
-    newImage.style.left = "50%";
-    newImage.style.transform = "translate(-50%, -50%)";
-    newImage.innerHTML = `
-        <img src="image/${type}.png" width="80" height="80" alt="${type}">
-    `;
-    newImage.onmousedown = onMouseDown;
-    container.appendChild(newImage);
+        function onMouseUp(e) {
+            if (selectedImage) {
+                selectedImage.style.opacity = 1; // 選択解除時に元に戻す
+            }
+            selectedImage = null;
+        }
 
-    var resizeXSlider = document.getElementById(type + "-resize-x");
-    var resizeYSlider = document.getElementById(type + "-resize-y");
-    var rotateSlider = document.getElementById(type + "-rotate");
-    resizeXSlider.value = 100;
-    resizeYSlider.value = 100;
-    rotateSlider.value = 0;
-    document.getElementById(type + "-scale-x").textContent = "100%";
-    document.getElementById(type + "-scale-y").textContent = "100%";
-    document.getElementById(type + "-rotation").textContent = "0°";
+        function showImages(type) {
+            var container = document.getElementById(type + "-container");
+            container.innerHTML = '';
+            var newImage = document.createElement("div");
+            newImage.className = "image-item";
+            newImage.style.top = "50%";
+            newImage.style.left = "50%";
+            newImage.style.transform = "translate(-50%, -50%)";
+            newImage.innerHTML = `
+                <img src="image/${type}.png" width="80px" height="80px" alt="${type}">
+            `;
+            newImage.onmousedown = onMouseDown;
+            container.appendChild(newImage);
 
-    activateSliders(newImage);
-}
+            var resizeXSlider = document.getElementById(type + "-resize-x");
+            var resizeYSlider = document.getElementById(type + "-resize-y");
+            var rotateSlider = document.getElementById(type + "-rotate");
+            resizeXSlider.value = 100;
+            resizeYSlider.value = 100;
+            rotateSlider.value = 0;
+            document.getElementById(type + "-scale-x").textContent = "100%";
+            document.getElementById(type + "-scale-y").textContent = "100%";
+            document.getElementById(type + "-rotation").textContent = "0°";
 
+            activateSliders(newImage);
+        }
 
-function activateSliders(image) {
-    var type = image.querySelector("img").alt;
+        function activateSliders(image) {
+            var type = image.querySelector("img").alt;
 
-    var resizeXSlider = document.getElementById(type + "-resize-x");
-    var resizeYSlider = document.getElementById(type + "-resize-y");
-    var rotateSlider = document.getElementById(type + "-rotate");
+            var resizeXSlider = document.getElementById(type + "-resize-x");
+            var resizeYSlider = document.getElementById(type + "-resize-y");
+            var rotateSlider = document.getElementById(type + "-rotate");
 
-    resizeXSlider.oninput = function () {
-        var scaleX = this.value / 100;
-        var img = image.querySelector("img");
-        img.style.width = 80 * scaleX + 'px';
-        document.getElementById(type + "-scale-x").textContent = this.value + "%";
-    };
+            resizeXSlider.oninput = function () {
+                var scaleX = this.value / 100;
+                var img = image.querySelector("img");
+                img.style.width = 80 * scaleX + 'px';
+                document.getElementById(type + "-scale-x").textContent = this.value + "%";
+            };
 
-    resizeYSlider.oninput = function () {
-        var scaleY = this.value / 100;
-        var img = image.querySelector("img");
-        img.style.height = 80 * scaleY + 'px';
-        document.getElementById(type + "-scale-y").textContent = this.value + "%";
-    };
+            resizeYSlider.oninput = function () {
+                var scaleY = this.value / 100;
+                var img = image.querySelector("img");
+                img.style.height = 80 * scaleY + 'px';
+                document.getElementById(type + "-scale-y").textContent = this.value + "%";
+            };
 
-    rotateSlider.oninput = function () {
-        var rotation = this.value;
-        image.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
-        document.getElementById(type + "-rotation").textContent = rotation + "°";
-    };
-}
+            rotateSlider.oninput = function () {
+                var rotation = this.value;
+                image.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+                document.getElementById(type + "-rotation").textContent = rotation + "°";
+            };
+        }
 
+        function changeImg() {
+    const switchImg = document.getElementById("switch");
+    switchImg.classList.toggle("on_switch");
 
+    const types = ["musi", "tori", "sakana"];
+    types.forEach(type => {
+        var img = document.querySelector(`#${type}-container .image-item img`);
+        if (img) {
+            var isGif = img.src.endsWith(`${type}.gif`);
+            var newSrc = isGif ? `image/${type}.png` : `image/${type}.gif`;
+            img.src = newSrc;
+        }
+    });
     window.addEventListener("load", function() {
-        doInit();
+            doInit();
+        });
+}
+
+//雲アニメーション
+        var animationInterval;
+
+        $(function() {
+            // 中に入る雲を position:absolute するので
+            $('#sky').css({
+        position: "absolute",
+        top: 0,
+        left: "50%", // ウィンドウの幅の50%の位置に設定
+        transform: "translateX(-50%)", // 幅の50%から左に半分移動して中央に配置
+        overflow: "hidden"
     });
 
-    const switchImg = document.getElementById("switch");
-    const lightImg = document.getElementById("light");
-    function changeImg(){
-    switchImg.classList.toggle("on_switch");
-    lightImg.classList.toggle("on_light");
-    }
-    switchImg.addEventListener("click",changeImg);
+            // 指定されたURLの画像の雲をskyの中に置く
+            function addObject(url) {
+                var speed = 30000 + Math.floor(Math.random() * 30000);
+                var top = -100 + Math.floor(Math.random() * 200);
+                var $div = $("<div>").css({"position": "absolute", "top": top, "left": "-200px"}).animate({
+                    left: $("#sky").width()
+                }, speed, "linear", function() {
+                    $(this).remove();
+                });
+                $div.append('<img src="' + url + '">');
+                $("#sky").append($div);
+            }
 
-    function changeImg() {
-    var sakanaImage = document.querySelector("#sakana-container .image-item img");
-    if (sakanaImage) {
-        var isGif = sakanaImage.src.endsWith("sakana.gif");
-        var newSrc = isGif ? "image/sakana.png" : "image/sakana.gif";
-        sakanaImage.src = newSrc;
-    }
-    switchImg.classList.toggle("on_switch");
-    lightImg.classList.toggle("on_light");
-}
-switchImg.addEventListener("click", changeImg);
+            // 雲アニメーションを開始する関数
+            function startAnimation() {
+                if (animationInterval) return; // 既にアニメーションが開始されている場合は何もしない
+
+                animationInterval = setInterval(function() {
+                    if ($('#sky div').length > 100) {
+                        return;
+                    } else {
+                        if (Math.random() < 0.20) {
+                            addObject("image/cloud1.png");
+                        }
+                        if (Math.random() < 0.10) {
+                            addObject("image/cloud2.png");
+                        }
+                    }
+                }, 100);
+            }
+
+            // 雲アニメーションを停止する関数
+            function stopAnimation() {
+                clearInterval(animationInterval);
+                animationInterval = null;
+                $('#sky').empty(); // 雲を全て削除
+            }
+
+            // ボタンのイベントリスナーを設定
+            $('#cloudButton').on('click', startAnimation);
+            $('#stopButton').on('click', stopAnimation);
+
+            // ページ読み込み時に初期化
+            doInit();
+        });
+
+        //雨アニメーション
+        document.addEventListener("DOMContentLoaded", function() {
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    const sakuraBox = document.querySelector('.sakura_parts_box');
+    
+    startButton.addEventListener('click', function() {
+        sakuraBox.classList.add('animate');
+        // Start creating sakura images at intervals
+        setInterval(createSakura, 200); // Adjust the interval as needed
+    });
+
+    stopButton.addEventListener('click', function() {
+        sakuraBox.classList.remove('animate');
+        sakuraBox.querySelectorAll('img').forEach(img => {
+            img.style.animation = 'none'; // Stop animation
+            img.offsetHeight; // Force reflow to stop animation
+            img.style.animation = ''; // Reset animation
+        });
+    });
+});
 
     </script>
 </head>
 <body>
     <header>
         <a href="index.html"><img src="image/logo.png" alt="象形文字で遊ぼう" width="300px" height="auto"></a>
+        <div class="header-container">
+            <button id="prevButton" onclick="prevGroup()"><img src="image/left.png" width="50px" height="50px"></button>
+            <h2 id="dynamic-title">背景画像を作ろう</h2>
+            <button id="nextButton" onclick="nextGroup()"><img src="image/right.png" width="50px" height="50px"></button>
+        </div>
     </header>
     <main>
-        <div class="header-container">
-            <button id="prevButton" onclick="prevGroup()"><img src="image/left.png" width="75px" height="75px"></button>
-            <h1 id="dynamic-title">背景画像を作ろう</h1>
-            <button id="nextButton" onclick="nextGroup()"><img src="image/right.png" width="75px" height="75px"></button>
-        </div>
         
         <div class="canvas-container">
-            <div class="canvas" id="canvas">
-                <img src="image/canvas.png" width="1000px" height="750px">
+            <div class="canvas" id="canvas" style="position: relative;">
+                <img src="image/canvas.png">
+                <div id="sky"></div>
                 <div class="image-container" id="yama-container"></div>
                 <div class="image-container" id="kawa-container"></div>
                 <div class="image-container" id="ta-container"></div>
@@ -276,94 +271,425 @@ switchImg.addEventListener("click", changeImg);
                 <div class="image-container" id="musi-container"></div>
                 <div class="image-container" id="tori-container"></div>
                 <div class="image-container" id="sakana-container"></div>
+                <div id="sakura_block">
+                    <div class="sakura_parts_box">
+                        <img src="image/amatubu.png" alt="" class="parts_01">
+                        <img src="image/amatubu.png" alt="" class="parts_02">
+                        <img src="image/amatubu.png" alt="" class="parts_03">
+                        <img src="image/amatubu.png" alt="" class="parts_04">
+                        <img src="image/amatubu.png" alt="" class="parts_05">
+                        <img src="image/amatubu.png" alt="" class="parts_06">
+                        <img src="image/amatubu.png" alt="" class="parts_07">
+                        <img src="image/amatubu.png" alt="" class="parts_08">
+                        <img src="image/amatubu.png" alt="" class="parts_09">
+                        <img src="image/amatubu.png" alt="" class="parts_10">
+                        <img src="image/amatubu.png" alt="" class="parts_11">
+                        <img src="image/amatubu.png" alt="" class="parts_12">
+                        <img src="image/amatubu.png" alt="" class="parts_13">
+                        <img src="image/amatubu.png" alt="" class="parts_14">
+                        <img src="image/amatubu.png" alt="" class="parts_15">
+                        <img src="image/amatubu.png" alt="" class="parts_16">
+                        <img src="image/amatubu.png" alt="" class="parts_17">
+                        <img src="image/amatubu.png" alt="" class="parts_18">
+                        <img src="image/amatubu.png" alt="" class="parts_19">
+                        <div id="ukanmuri"></div>
+                    </div>
             </div>
         </div>
         <div class="control-container">
-            <div class="button-group">
-                <button onclick="showImages('yama')">山</button>
-                <button onclick="showImages('kawa')">川</button>
-                <button onclick="showImages('ta')">田</button>
-                <button onclick="showImages('ki')">木</button>
-            </div>
-            <div class="button-group">
-                <button onclick="showImages('musi')">虫</button>
-                <button onclick="showImages('tori')">鳥</button>
-                <div id="light"><button onclick="showImages('sakana')">魚</button></div>
-                <div id="switch"></div>
-            </div>
-            <div class="button-group">
-                <button onclick="showImages('yama')">き</button>
-                <button onclick="showImages('kawa')">やま</button>
-                <button onclick="showImages('ki')">かわ</button>
-            </div>
-        </div>
-        <div class="slider-container">
             <div class="slider-container">
+            <div class="button-group">
                 <div id="yama-sliders" class="sliders">
-                    <p>やま倍率（横）：<span id="yama-scale-x">100%</span></p>
+                    <button onclick="showImages('yama')">山</button>
+                    <p>倍率（横）：<span id="yama-scale-x">100%</span></p>
                     <input id="yama-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
-                    <p>やま倍率（縦）：<span id="yama-scale-y">100%</span></p>
+                    <p>倍率（縦）：<span id="yama-scale-y">100%</span></p>
                     <input id="yama-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
-                    <p>やま回転：<span id="yama-rotation">0°</span></p>
+                    <p>回転：<span id="yama-rotation">0°</span></p>
                     <input id="yama-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
                 </div>
                 <div id="kawa-sliders" class="sliders">
-                    <p>かわ倍率（横）：<span id="kawa-scale-x">100%</span></p>
+                    <button onclick="showImages('kawa')">川</button>
+                    <p>倍率（横）：<span id="kawa-scale-x">100%</span></p>
                     <input id="kawa-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
-                    <p>かわ倍率（縦）：<span id="kawa-scale-y">100%</span></p>
+                    <p>倍率（縦）：<span id="kawa-scale-y">100%</span></p>
                     <input id="kawa-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
-                    <p>かわ回転：<span id="kawa-rotation">0°</span></p>
+                    <p>回転：<span id="kawa-rotation">0°</span></p>
                     <input id="kawa-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
                 </div>
                 <div id="ta-sliders" class="sliders">
-                    <p>た倍率（横）：<span id="ta-scale-x">100%</span></p>
+                    <button onclick="showImages('ta')">田</button>
+                    <p>倍率（横）：<span id="ta-scale-x">100%</span></p>
                     <input id="ta-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
-                    <p>た倍率（縦）：<span id="ta-scale-y">100%</span></p>
+                    <p>倍率（縦）：<span id="ta-scale-y">100%</span></p>
                     <input id="ta-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
-                    <p>た回転：<span id="ta-rotation">0°</span></p>
+                    <p>回転：<span id="ta-rotation">0°</span></p>
                     <input id="ta-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
                 </div>
                 <div id="ki-sliders" class="sliders">
-                    <p>き倍率（横）：<span id="ki-scale-x">100%</span></p>
+                    <button onclick="showImages('ki')">木</button>
+                    <p>倍率（横）：<span id="ki-scale-x">100%</span></p>
                     <input id="ki-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
-                    <p>き倍率（縦）：<span id="ki-scale-y">100%</span></p>
+                    <p>倍率（縦）：<span id="ki-scale-y">100%</span></p>
                     <input id="ki-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
-                    <p>き回転：<span id="ki-rotation">0°</span></p>
+                    <p>回転：<span id="ki-rotation">0°</span></p>
                     <input id="ki-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
                 </div>
             </div>
-            <div id="musi-sliders" class="sliders">
-                <p>虫倍率（横）：<span id="musi-scale-x">100%</span></p>
-                <input id="musi-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
-                <p>虫倍率（縦）：<span id="musi-scale-y">100%</span></p>
-                <input id="musi-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
-                <p>虫回転：<span id="musi-rotation">0°</span></p>
-                <input id="musi-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
             </div>
+            <div class="button-group">
+                <div id="musi-sliders" class="sliders">
+                    <div id="light1"><button onclick="showImages('musi')">虫</button></div>
+                    <p>倍率（横）：<span id="musi-scale-x">100%</span></p>
+                    <input id="musi-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>倍率（縦）：<span id="musi-scale-y">100%</span></p>
+                    <input id="musi-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>回転：<span id="musi-rotation">0°</span></p>
+                    <input id="musi-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                </div>
             <div id="tori-sliders" class="sliders">
-                <p>とり倍率（横）：<span id="tori-scale-x">100%</span></p>
+                <div id="light2"><button onclick="showImages('tori')">鳥</button></div>
+                <p>倍率（横）：<span id="tori-scale-x">100%</span></p>
                 <input id="tori-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
-                <p>とり倍率（縦）：<span id="tori-scale-y">100%</span></p>
+                <p>倍率（縦）：<span id="tori-scale-y">100%</span></p>
                 <input id="tori-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
-                <p>とり回転：<span id="tori-rotation">0°</span></p>
+                <p>回転：<span id="tori-rotation">0°</span></p>
                 <input id="tori-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
             </div>
-            <div id="sakana-sliders" class="sliders">
-                <p>さかな倍率（横）：<span id="sakana-scale-x">100%</span></p>
-                <input id="sakana-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
-                <p>さかな倍率（縦）：<span id="sakana-scale-y">100%</span></p>
-                <input id="sakana-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
-                <p>さかな回転：<span id="sakana-rotation">0°</span></p>
-                <input id="sakana-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                <div id="sakana-sliders" class="sliders">
+                    <div id="light3"><button onclick="showImages('sakana')">魚</button></div>
+                    <p>倍率（横）：<span id="sakana-scale-x">100%</span></p>
+                    <input id="sakana-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>倍率（縦）：<span id="sakana-scale-y">100%</span></p>
+                    <input id="sakana-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <p>回転：<span id="sakana-rotation">0°</span></p>
+                    <input id="sakana-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                </div>
+                <div id="switch" class="sliders"></div>
+          </div>
+            <div class="button-group">
+                <button id="cloudButton">雲</button>
+                <button id="stopButton">Stop</button>
+                <button id="startButton">開始</button>
+                <button id="stopButton">停止</button>
+                <button onclick="showImages('ki')">かわ</button>
             </div>
-            
+        </div>
+        
         </div>
     </main>
     <footer>
-       <img src="image/name.png" alt="作：たけさこほのか" width="150px" height="auto"></a>
+        <img src="image/name.png" alt="作：たけさこほのか" width="150px" height="auto"></a>
     </footer>
 </body>
 </html>
+
+<style>
+    body{
+    font-family: "ヒラギノ明朝 ProN","Hiragino Mincho ProN"; font-weight: bold;
+}
+/*ヘッダーについて*/
+header{
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.header-container {
+    display: flex;
+    align-items: center;
+    width: 900px; 
+    margin: 0 auto; 
+    position: relative; 
+}
+.header-container button {
+    border: none;
+    background: transparent;
+}
+.header-container h2 {
+    flex-grow: 0; 
+    text-align: center; 
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); 
+}
+#prevButton {
+    position: absolute;
+    left: 10px; 
+    top: 50%; 
+    transform: translateY(-50%);
+}
+#nextButton {
+    position: absolute;
+    right: 10px; 
+    top: 50%; 
+    transform: translateY(-50%);
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Add this line to enable wrapping */
+    justify-content: space-around; /* or space-between, space-evenly */
+    align-items: center;
+    margin: 20px;
+}
+.canvas{
+    margin: 10px;
+    text-align: center;
+}
+
+.image-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.image-item {
+    position: absolute;
+    cursor: grab;
+    opacity: 1;
+    transition: opacity 0.2s; /* 画像の薄さをスムーズに変更 */
+}
+.control-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* ボタンとスライダーの間隔を設定 */
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    gap: 20px; /* ボタンの間隔を設定 */
+}
+button {
+    margin: 3px;
+    padding: 3px;
+    display: block;
+    background-color:lightslategray;
+    height: 50px;
+    width: 250px;
+    border: none;
+    transition: transform 0.2s;
+    align-items: center;
+    color: aliceblue;
+    font-size: 20px;
+}
+button:hover {
+    transform: scale(1.1);
+}
+
+.button-group {
+    display: none;
+}
+.button-group.active {
+    display: block;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px; 
+}
+.sliders {
+    text-align: center;
+    margin: 3px;
+}
+
+.canvas-container {
+    position: relative;
+    margin: 0px;
+    text-align: center;
+}
+.canvas img {
+    width: 800px;
+    height: 600px;
+    display: block;
+    margin: 0 auto;
+}
+.button-group {
+    display: none;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.button-group.active {
+    display: flex;
+}
+
+#switch {
+            width: 250px;
+            height: 50px;
+            background: url(image/off.png) no-repeat;
+            background-size: 100% 100%;
+            cursor: pointer;
+        }
+
+        #light1 {
+            width: 50px;
+            height: 50px;
+            background: url(image/musi.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light2 {
+            width: 50px;
+            height: 50px;
+            background: url(image/tori.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light3 {
+            width: 50px;
+            height: 50px;
+            background: url(image/sakana.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #switch.on_switch {
+            background: url(image/on.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light1.on_light {
+            background: url(image/musi.gif) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light2.on_light {
+            background: url(image/tori.gif) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light3.on_light {
+            background: url(image/sakana.gif) no-repeat;
+            background-size: 100% 100%
+        }
+
+
+        /*雲のアニメーション*/
+
+#sky {
+    width: 800px; /* ここで幅を設定 */
+    height: 200px;
+    background-color: transparent; /* 背景を透明に */
+    position: relative; /* 絶対位置 */
+    top: 0; /* canvas内の上部に配置 */
+    left: 50%; /* ウィンドウの幅に対して中心に配置 */
+    transform: translateX(-50%); /* 50% の位置から左に半分移動して中心に調整 */
+    overflow: hidden;
+}
+
+#sky img {
+    position: absolute;
+    width: 150px;
+    height: 90px;
+    margin: auto;
+}
+
+.control-buttons {
+    margin-top: 20px;
+    text-align: center;
+}
+
+  /*-----------------------------------
+        雨のアニメーション
+        -----------------------------------*/
+        #sakura_block {
+    position: absolute; /* Canvasの上に表示させるために絶対位置を設定 */
+    top: 0;
+    left: 0px;
+    width:800px;
+    height: 600px;
+    pointer-events: none; /* クリックイベントを無効にしてcanvasの操作を可能にする */
+    overflow: hidden; /* オーバーフローを隠す */
+}
+
+.sakura_parts_box {
+    position: relative; /* サクラアニメーションの位置を設定 */
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+        #sakura_block .sakura_parts_box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        #sakura_block .sakura_parts_box img {
+            position: absolute;
+            opacity: 0;
+            width: 13px; /* 花びらのサイズ */
+        }
+
+        /*-----------------------------------
+        桜の花びらパーツの表示位置
+        -----------------------------------*/
+        img.parts_01 {top: 0; left: 5%;}
+        img.parts_02 {top: 0; left: 12%;}
+        img.parts_03 {top: 0; left: 15%;}
+        img.parts_04 {top: 0; left: 22%;}
+        img.parts_05 {top: 0; left: 25%;}
+        img.parts_06 {top: 0; left: 28%;}
+        img.parts_07 {top: 0; left: 35%;}
+        img.parts_08 {top: 0; left: 40%;}
+        img.parts_09 {top: 0; left: 43%;}
+        img.parts_10 {top: 0; left: 50%;}
+        img.parts_11 {top: 0; left: 55%;}
+        img.parts_12 {top: 0; left: 60%;}
+        img.parts_13 {top: 0; left: 63%;}
+        img.parts_14 {top: 0; left: 70%;}
+        img.parts_15 {top: 0; left: 75%;}
+        img.parts_16 {top: 0; left: 81%;}
+        img.parts_17 {top: 0; left: 85%;}
+        img.parts_18 {top: 0; left: 90%;}
+        img.parts_19 {top: 0; left: 93%;}
+
+        /*-----------------------------------
+        舞い散るアニメーション
+        -----------------------------------*/
+        @keyframes sakura {
+            0% {
+                opacity: 0;
+                transform: translateY(-100px); /* 開始位置 */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(400px); /* 終了位置 */
+            }
+        }
+
+        /* アニメーションが追加されるとき */
+        .sakura_parts_box.animate img {
+            animation: sakura linear 6s forwards; /* 一回限りのアニメーション */
+        }
+
+        /* ukanmuri.pngの初期状態とアニメーション状態 */
+        #ukanmuri {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('image/ukanmuri.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0; /* 初期状態で非表示 */
+            transition: opacity 1s ease; /* 表示に遷移効果を追加 */
+        }
+
+        /* アニメーション開始時に表示 */
+        .sakura_parts_box.animate #ukanmuri {
+            opacity: 1;
+        }
+
+footer{
+    position: relative;
+    margin: 10px;
+    text-align: center;
+}
+</style>
+
+
 
 
 
