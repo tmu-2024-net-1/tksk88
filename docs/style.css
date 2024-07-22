@@ -1,2 +1,303 @@
+body{
+    font-family: "ヒラギノ明朝 ProN","Hiragino Mincho ProN"; font-weight: bold;
+}
+/*ヘッダーについて*/
+header{
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.header-container {
+    display: flex;
+    align-items: center;
+    width: 900px; 
+    margin: 0 auto; 
+    position: relative; 
+}
+.header-container button {
+    border: none;
+    background: transparent;
+}
+.header-container h2 {
+    flex-grow: 0; 
+    text-align: center; 
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); 
+}
+#prevButton {
+    position: absolute;
+    left: 10px; 
+    top: 50%; 
+    transform: translateY(-50%);
+}
+#nextButton {
+    position: absolute;
+    right: 10px; 
+    top: 50%; 
+    transform: translateY(-50%);
+}
 
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Add this line to enable wrapping */
+    justify-content: space-around; /* or space-between, space-evenly */
+    align-items: center;
+    margin: 20px;
+}
+.canvas{
+    margin: 10px;
+    text-align: center;
+}
+
+.image-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.image-item {
+    position: absolute;
+    cursor: grab;
+    opacity: 1;
+    transition: opacity 0.2s; /* 画像の薄さをスムーズに変更 */
+}
+.control-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* ボタンとスライダーの間隔を設定 */
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    gap: 20px; /* ボタンの間隔を設定 */
+}
+button {
+    margin: 3px;
+    padding: 3px;
+    display: block;
+    background-color:lightslategray;
+    height: 50px;
+    width: 250px;
+    border: none;
+    transition: transform 0.2s;
+    align-items: center;
+    color: aliceblue;
+    font-size: 20px;
+}
+button:hover {
+    transform: scale(1.1);
+}
+
+.button-group {
+    display: none;
+}
+.button-group.active {
+    display: block;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px; 
+}
+.sliders {
+    text-align: center;
+    margin: 3px;
+}
+
+.canvas-container {
+    position: relative;
+    margin: 0px;
+    text-align: center;
+}
+.canvas img {
+    width: 800px;
+    height: 400px;
+    display: block;
+    margin: 0 auto;
+}
+.button-group {
+    display: none;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.button-group.active {
+    display: flex;
+}
+
+#switch {
+            width: 250px;
+            height: 50px;
+            background: url(images/off.png) no-repeat;
+            background-size: 100% 100%;
+            cursor: pointer;
+        }
+
+        #light1 {
+            width: 50px;
+            height: 50px;
+            background: url(images/musi.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light2 {
+            width: 50px;
+            height: 50px;
+            background: url(images/tori.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light3 {
+            width: 50px;
+            height: 50px;
+            background: url(images/sakana.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #switch.on_switch {
+            background: url(images/on.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light1.on_light {
+            background: url(images/musi.gif) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light2.on_light {
+            background: url(images/tori.gif) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #light3.on_light {
+            background: url(images/sakana.gif) no-repeat;
+            background-size: 100% 100%
+        }
+
+
+        /*雲のアニメーション*/
+
+#sky {
+    width: 800px; /* ここで幅を設定 */
+    height: 200px;
+    background-color: transparent; /* 背景を透明に */
+    position: relative; /* 絶対位置 */
+    top: 0; /* canvas内の上部に配置 */
+    left: 50%; /* ウィンドウの幅に対して中心に配置 */
+    transform: translateX(-50%); /* 50% の位置から左に半分移動して中心に調整 */
+    overflow: hidden;
+}
+
+#sky img {
+    position: absolute;
+    width: 150px;
+    height: 90px;
+    margin: auto;
+}
+
+.control-buttons {
+    margin-top: 10px;
+    text-align: center;
+}
+
+  /*-----------------------------------
+        雨のアニメーション
+        -----------------------------------*/
+        #sakura_block {
+    position: absolute; /* Canvasの上に表示させるために絶対位置を設定 */
+    top: 0;
+    left: 0px;
+    width:800px;
+    height: 600px;
+    pointer-events: none; /* クリックイベントを無効にしてcanvasの操作を可能にする */
+    overflow: hidden; /* オーバーフローを隠す */
+}
+
+.sakura_parts_box {
+    position: relative; /* サクラアニメーションの位置を設定 */
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+        #sakura_block .sakura_parts_box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        #sakura_block .sakura_parts_box img {
+            position: absolute;
+            opacity: 0;
+            width: 13px; /* 花びらのサイズ */
+        }
+
+        /*-----------------------------------
+        桜の花びらパーツの表示位置
+        -----------------------------------*/
+        img.parts_01 {top: 0; left: 5%;}
+        img.parts_02 {top: 0; left: 12%;}
+        img.parts_03 {top: 0; left: 15%;}
+        img.parts_04 {top: 0; left: 22%;}
+        img.parts_05 {top: 0; left: 25%;}
+        img.parts_06 {top: 0; left: 28%;}
+        img.parts_07 {top: 0; left: 35%;}
+        img.parts_08 {top: 0; left: 40%;}
+        img.parts_09 {top: 0; left: 43%;}
+        img.parts_10 {top: 0; left: 50%;}
+        img.parts_11 {top: 0; left: 55%;}
+        img.parts_12 {top: 0; left: 60%;}
+        img.parts_13 {top: 0; left: 63%;}
+        img.parts_14 {top: 0; left: 70%;}
+        img.parts_15 {top: 0; left: 75%;}
+        img.parts_16 {top: 0; left: 81%;}
+        img.parts_17 {top: 0; left: 85%;}
+        img.parts_18 {top: 0; left: 90%;}
+        img.parts_19 {top: 0; left: 93%;}
+
+        /*-----------------------------------
+        舞い散るアニメーション
+        -----------------------------------*/
+        @keyframes sakura {
+            0% {
+                opacity: 0;
+                transform: translateY(-100px); /* 開始位置 */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(400px); /* 終了位置 */
+            }
+        }
+
+        /* アニメーションが追加されるとき */
+        .sakura_parts_box.animate img {
+            animation: sakura linear 6s forwards; /* 一回限りのアニメーション */
+        }
+
+        /* ukanmuri.pngの初期状態とアニメーション状態 */
+        #ukanmuri {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('image/ukanmuri.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0; /* 初期状態で非表示 */
+            transition: opacity 1s ease; /* 表示に遷移効果を追加 */
+        }
+
+        /* アニメーション開始時に表示 */
+        .sakura_parts_box.animate #ukanmuri {
+            opacity: 1;
+        }
+
+footer{
+    position: relative;
+    margin: 10px;
+    text-align: center;
+}
 
