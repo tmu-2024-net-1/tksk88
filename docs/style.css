@@ -106,7 +106,7 @@ button:hover {
 }
 .sliders {
     text-align: center;
-    margin: 3px;
+    margin: 10px;
 }
 
 .canvas-container {
@@ -114,12 +114,7 @@ button:hover {
     margin: 0px;
     text-align: center;
 }
-.canvas img {
-    width: 800px;
-    height: 400px;
-    display: block;
-    margin: 0 auto;
-}
+
 .button-group {
     display: none;
     flex-direction: row;
@@ -130,14 +125,27 @@ button:hover {
     display: flex;
 }
 
-#switch {
-            width: 250px;
-            height: 50px;
-            background: url(images/off.png) no-repeat;
-            background-size: 100% 100%;
-            cursor: pointer;
-        }
+       
+#switch1, #switch2, #switch3 {
+    width: 250px;
+    height: 50px;
+    background: url('images/off.png') no-repeat;
+    background-size: 100% 100%;
+    cursor: pointer;
+}
 
+#switch1.change {
+    background: url('images/on.png') no-repeat;
+    background-size: 100% 100%;
+}
+#switch2.change {
+    background: url('images/on.png') no-repeat;
+    background-size: 100% 100%;
+}
+#switch3.change {
+    background: url('images/on.png') no-repeat;
+    background-size: 100% 100%;
+}
         #light1 {
             width: 50px;
             height: 50px;
@@ -156,11 +164,6 @@ button:hover {
             width: 50px;
             height: 50px;
             background: url(images/sakana.png) no-repeat;
-            background-size: 100% 100%;
-        }
-
-        #switch.on_switch {
-            background: url(images/on.png) no-repeat;
             background-size: 100% 100%;
         }
 

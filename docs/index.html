@@ -24,7 +24,7 @@
         
         <div class="canvas-container">
             <div class="canvas" id="canvas" style="position: relative;">
-                <img src="images/canvas.png">
+                <img src="images/canvas.png"width="800px" height="400px">
                 <div id="sky"></div>
                 <div class="image-container" id="yama-container"></div>
                 <div class="image-container" id="kawa-container"></div>
@@ -102,7 +102,7 @@
             <div class="button-group">
                 <div id="musi-sliders" class="sliders">
                     <div id="light1"><button onclick="showImages('musi')">虫</button></div>
-                    <div id="switch" class="sliders"></div>
+                    <div id="switch1"></div>
                     <p>倍率（横）：<span id="musi-scale-x">100%</span></p>
                     <input id="musi-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
                     <p>倍率（縦）：<span id="musi-scale-y">100%</span></p>
@@ -112,7 +112,7 @@
                 </div>
              <div id="tori-sliders" class="sliders">
                 <div id="light2"><button onclick="showImages('tori')">鳥</button></div>
-                <div id="switch" class="sliders"></div>
+                <div id="switch2"></div>
                 <p>倍率（横）：<span id="tori-scale-x">100%</span></p>
                 <input id="tori-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
                 <p>倍率（縦）：<span id="tori-scale-y">100%</span></p>
@@ -122,7 +122,7 @@
               </div>
                 <div id="sakana-sliders" class="sliders">
                     <div id="light3"><button onclick="showImages('sakana')">魚</button></div>
-                    <div id="switch" class="sliders"></div>
+                    <div id="switch3"></div>
                     <p>倍率（横）：<span id="sakana-scale-x">100%</span></p>
                     <input id="sakana-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
                     <p>倍率（縦）：<span id="sakana-scale-y">100%</span></p>
@@ -134,7 +134,8 @@
             <div class="button-group">
                 <button id="cloudButton">雲</button>
                 <button id="startButton">雨</button>
-                <button onclick="showImages('ki')">かわ</button>
+                <button onclick="showImages('ki')">日</button>
+                <button onclick="showImages('ki')">月</button>
             </div>
         </div>
         
