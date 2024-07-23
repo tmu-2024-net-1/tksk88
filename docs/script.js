@@ -9,6 +9,31 @@ var titles = [
     "エフェクトを追加しよう"
 ];
 
+function nextGroup() {
+    if (currentGroup < buttonGroups.length - 1) {
+        currentGroup++;
+        showButtonGroup(currentGroup);
+        updateTitle(currentGroup);
+    }
+}
+
+function prevGroup() {
+    if (currentGroup > 0) {
+        currentGroup--;
+        showButtonGroup(currentGroup);
+        updateTitle(currentGroup);
+    }
+}
+
+function updateTitle(index) {
+    document.getElementById('dynamic-title').textContent = titles[index];
+}
+
+let buttons = document.getElementsByClassName("button");
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', buttonClick);
+}
+
 function doInit() {
     document.onmousemove = onMouseMove;
     document.onmouseup = onMouseUp;
@@ -31,26 +56,6 @@ function showButtonGroup(index) {
     });
     document.getElementById('prevButton').style.display = index === 0 ? 'none' : 'inline-block';
     document.getElementById('nextButton').style.display = index === buttonGroups.length - 1 ? 'none' : 'inline-block';
-}
-
-function nextGroup() {
-    if (currentGroup < buttonGroups.length - 1) {
-        currentGroup++;
-        showButtonGroup(currentGroup);
-        updateTitle(currentGroup);
-    }
-}
-
-function prevGroup() {
-    if (currentGroup > 0) {
-        currentGroup--;
-        showButtonGroup(currentGroup);
-        updateTitle(currentGroup);
-    }
-}
-
-function updateTitle(index) {
-    document.getElementById('dynamic-title').textContent = titles[index];
 }
 
 function onMouseDown(e) {
@@ -238,7 +243,7 @@ $(function() {
     doInit();
 });
 
-
+//雨のアニメーション
 document.addEventListener("DOMContentLoaded", function() {
     const rainButton = document.getElementById('rainButton');
     const rainBox = document.querySelector('.rain_parts_box');
@@ -300,35 +305,32 @@ document.addEventListener("DOMContentLoaded", function() {
     rainButton.addEventListener('click', toggleRain);
 });
 
-// 現在表示されている画像の名前を保持する変数
+
 let currentImageName = null;
 
 function toggleImageOnCanvas(imageName) {
     const canvasContainer = document.getElementById('canvas');
     const existingImage = canvasContainer.querySelector('img[data-image-name="' + imageName + '"]');
 
-    // 画像がすでに表示されている場合は削除する
     if (existingImage) {
         canvasContainer.removeChild(existingImage);
         currentImageName = null;
     } else {
-        // 画像が表示されていない場合は追加する
         const img = document.createElement('img');
         img.src = `images/${imageName}.png`;
         img.style.position = 'absolute';
-        img.style.top = '50%';
+        img.style.top = '49%';
         img.style.left = '50%';
         img.style.transform = 'translate(-50%, -50%)';
-        img.style.width = '800px';  // 必要に応じてサイズを調整
+        img.style.width = '800px';  
         img.style.height = '400px';
-        img.dataset.imageName = imageName;  // 画像の名前をデータ属性に保存
+        img.dataset.imageName = imageName;  
 
         canvasContainer.appendChild(img);
         currentImageName = imageName;
     }
 }
 
-// 日ボタンのクリックイベントにトグル機能を追加
 document.getElementById('hiButton').addEventListener('click', function() {
     toggleImageOnCanvas('hi');
 });

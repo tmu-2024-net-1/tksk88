@@ -1,7 +1,6 @@
 body{
     font-family: "ヒラギノ明朝 ProN","Hiragino Mincho ProN"; font-weight: bold;
 }
-/*ヘッダーについて*/
 header{
     padding: 20px;
     font-size: 20px;
@@ -40,8 +39,8 @@ header{
 
 .container {
     display: flex;
-    flex-wrap: wrap; /* Add this line to enable wrapping */
-    justify-content: space-around; /* or space-between, space-evenly */
+    flex-wrap: wrap; 
+    justify-content: space-around; 
     align-items: center;
     margin: 20px;
 }
@@ -60,19 +59,19 @@ header{
     position: absolute;
     cursor: grab;
     opacity: 1;
-    transition: opacity 0.2s; /* 画像の薄さをスムーズに変更 */
+    transition: opacity 0.2s;
 }
 .control-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px; /* ボタンとスライダーの間隔を設定 */
+    gap: 10px; 
 }
 .button-container {
     display: flex;
     justify-content: center;
     margin: 10px 0;
-    gap: 20px; /* ボタンの間隔を設定 */
+    gap: 20px; 
 }
 button {
     margin: 3px;
@@ -88,7 +87,7 @@ button {
     font-size: 20px;
 }
 button:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .button-group {
@@ -107,6 +106,26 @@ button:hover {
 .sliders {
     text-align: center;
     margin: 10px;
+}
+.button1 {
+    margin: 3px;
+    padding: 3px;
+    display: inline-block; 
+    background-color: white;
+    height: 30px;
+    width: 500px;
+    border: none;
+    transition: background-color 0.2s; 
+    align-items: center;
+    color: lightslategray;
+    font-size: 20px;
+    text-align: center;
+    text-decoration: none;
+    line-height: 30px; 
+}
+
+.button1:hover {
+    transform: scale(1.05);
 }
 
 .canvas-container {
@@ -276,7 +295,6 @@ button:hover {
 #ukanmuri.visible {
     opacity: 1;
 }
-
 
 footer{
     position: relative;
