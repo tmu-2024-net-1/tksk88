@@ -319,7 +319,7 @@ function toggleImageOnCanvas(imageName) {
         const img = document.createElement('img');
         img.src = `images/${imageName}.png`;
         img.style.position = 'absolute';
-        img.style.top = '48%';
+        img.style.top = '49%';
         img.style.left = '50%';
         img.style.transform = 'translate(-50%, -50%)';
         img.style.width = '800px';  
