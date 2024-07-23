@@ -175,82 +175,166 @@ $("#switch1").on("click", function () {
   });
 
 //雲アニメーション
-        var animationInterval;
+var animationInterval;
+var isAnimationRunning = false; 
 
-        $(function() {
-            // 中に入る雲を position:absolute するので
-            $('#sky').css({
+$(function() {
+    $('#sky').css({
         position: "absolute",
         top: 0,
-        left: "50%", // ウィンドウの幅の50%の位置に設定
-        transform: "translateX(-50%)", // 幅の50%から左に半分移動して中央に配置
+        left: "50%",
+        transform: "translateX(-50%)",
         overflow: "hidden"
     });
 
-            // 指定されたURLの画像の雲をskyの中に置く
-            function addObject(url) {
-                var speed = 30000 + Math.floor(Math.random() * 30000);
-                var top = -100 + Math.floor(Math.random() * 200);
-                var $div = $("<div>").css({"position": "absolute", "top": top, "left": "-200px"}).animate({
-                    left: $("#sky").width()
-                }, speed, "linear", function() {
-                    $(this).remove();
-                });
-                $div.append('<img src="' + url + '">');
-                $("#sky").append($div);
-            }
-
-            // 雲アニメーションを開始する関数
-            function startAnimation() {
-                if (animationInterval) return; // 既にアニメーションが開始されている場合は何もしない
-
-                animationInterval = setInterval(function() {
-                    if ($('#sky div').length > 100) {
-                        return;
-                    } else {
-                        if (Math.random() < 0.20) {
-                            addObject("images/cloud1.png");
-                        }
-                        if (Math.random() < 0.10) {
-                            addObject("images/cloud2.png");
-                        }
-                    }
-                }, 100);
-            }
-
-            // 雲アニメーションを停止する関数
-            function stopAnimation() {
-                clearInterval(animationInterval);
-                animationInterval = null;
-                $('#sky').empty(); // 雲を全て削除
-            }
-
-            // ボタンのイベントリスナーを設定
-            $('#cloudButton').on('click', startAnimation);
-            $('#stopButton').on('click', stopAnimation);
-
-            // ページ読み込み時に初期化
-            doInit();
+    function addObject(url) {
+        var speed = 30000 + Math.floor(Math.random() * 30000);
+        var top = -100 + Math.floor(Math.random() * 200);
+        var $div = $("<div>").css({"position": "absolute", "top": top, "left": "-200px"}).animate({
+            left: $("#sky").width()
+        }, speed, "linear", function() {
+            $(this).remove();
         });
+        $div.append('<img src="' + url + '">');
+        $("#sky").append($div);
+    }
 
-        //雨アニメーション
-        document.addEventListener("DOMContentLoaded", function() {
-    const startButton = document.getElementById('startButton');
-    const stopButton = document.getElementById('stopButton');
-    const sakuraBox = document.querySelector('.sakura_parts_box');
-    
-    startButton.addEventListener('click', function() {
-        sakuraBox.classList.add('animate');
-        // Start creating sakura images at intervals
-        setInterval(createSakura, 200); // Adjust the interval as needed
-    });
+    function startAnimation() {
+        if (animationInterval) return;
 
-    stopButton.addEventListener('click', function() {
-        sakuraBox.classList.remove('animate');
-        sakuraBox.querySelectorAll('img').forEach(img => {
-            img.style.animation = 'none'; // Stop animation
-            img.offsetHeight; // Force reflow to stop animation
-            img.style.animation = ''; // Reset animation
-        });
-    });
+        animationInterval = setInterval(function() {
+            if ($('#sky div').length > 100) {
+                return;
+            } else {
+                if (Math.random() < 0.20) {
+                    addObject("images/cloud1.png");
+                }
+                if (Math.random() < 0.10) {
+                    addObject("images/cloud2.png");
+                }
+            }
+        }, 100);
+    }
+
+    function stopAnimation() {
+        clearInterval(animationInterval);
+        animationInterval = null;
+        $('#sky').empty();
+    }
+
+    function toggleAnimation() {
+        if (isAnimationRunning) {
+            stopAnimation();
+            $('#cloudButton').text('雲'); 
+        } else {
+            startAnimation();
+            $('#cloudButton').text('停止'); 
+        }
+        isAnimationRunning = !isAnimationRunning;
+    }
+
+    $('#cloudButton').on('click', toggleAnimation);
+
+    doInit();
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const rainButton = document.getElementById('rainButton');
+    const rainBox = document.querySelector('.rain_parts_box');
+    const ukanmuri = document.getElementById('ukanmuri');
+    let isRainAnimationRunning = false;
+    let rainInterval;
+
+    $('#rain_block').css({
+        position: "absolute",
+        top: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
+        overflow: "hidden"
+    });
+
+    function createRain() {
+        const img = document.createElement('img');
+        img.src = 'images/amatubu.png';
+        img.style.left = Math.random() * 100 + '%';
+        rainBox.appendChild(img);
+
+        setTimeout(() => {
+            img.style.animation = `rain linear ${3 + Math.random() * 3}s forwards`;
+        }, Math.random() * 2000);
+    }
+
+    function startRain() {
+        if (rainInterval) return;
+
+        rainBox.classList.add('animate');
+        rainInterval = setInterval(createRain, 200);
+        ukanmuri.classList.add('visible');
+    }
+
+    function stopRain() {
+        clearInterval(rainInterval);
+        rainInterval = null;
+        rainBox.classList.remove('animate');
+        rainBox.querySelectorAll('img').forEach(img => {
+            img.style.animation = 'none';
+            img.offsetHeight;
+            img.style.animation = '';
+        });
+        rainBox.innerHTML = '';
+        ukanmuri.classList.remove('visible');
+    }
+
+    function toggleRain() {
+        if (isRainAnimationRunning) {
+            stopRain();
+            rainButton.textContent = '雨';
+        } else {
+            startRain();
+            rainButton.textContent = '停止';
+        }
+        isRainAnimationRunning = !isRainAnimationRunning;
+    }
+
+    rainButton.addEventListener('click', toggleRain);
+});
+
+// 現在表示されている画像の名前を保持する変数
+let currentImageName = null;
+
+function toggleImageOnCanvas(imageName) {
+    const canvasContainer = document.getElementById('canvas');
+    const existingImage = canvasContainer.querySelector('img[data-image-name="' + imageName + '"]');
+
+    // 画像がすでに表示されている場合は削除する
+    if (existingImage) {
+        canvasContainer.removeChild(existingImage);
+        currentImageName = null;
+    } else {
+        // 画像が表示されていない場合は追加する
+        const img = document.createElement('img');
+        img.src = `images/${imageName}.png`;
+        img.style.position = 'absolute';
+        img.style.top = '50%';
+        img.style.left = '50%';
+        img.style.transform = 'translate(-50%, -50%)';
+        img.style.width = '800px';  // 必要に応じてサイズを調整
+        img.style.height = '400px';
+        img.dataset.imageName = imageName;  // 画像の名前をデータ属性に保存
+
+        canvasContainer.appendChild(img);
+        currentImageName = imageName;
+    }
+}
+
+// 日ボタンのクリックイベントにトグル機能を追加
+document.getElementById('hiButton').addEventListener('click', function() {
+    toggleImageOnCanvas('hi');
+});
+document.getElementById('tukiButton').addEventListener('click', function() {
+    toggleImageOnCanvas('tuki');
+});
+
+
+

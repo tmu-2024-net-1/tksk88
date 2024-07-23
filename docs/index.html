@@ -25,7 +25,6 @@
         <div class="canvas-container">
             <div class="canvas" id="canvas" style="position: relative;">
                 <img src="images/canvas.png"width="800px" height="400px">
-                <div id="sky"></div>
                 <div class="image-container" id="yama-container"></div>
                 <div class="image-container" id="kawa-container"></div>
                 <div class="image-container" id="ta-container"></div>
@@ -33,29 +32,13 @@
                 <div class="image-container" id="musi-container"></div>
                 <div class="image-container" id="tori-container"></div>
                 <div class="image-container" id="sakana-container"></div>
-                <div id="sakura_block">
-                    <div class="sakura_parts_box">
-                        <img src="images/amatubu.png" alt="" class="parts_01">
-                        <img src="images/amatubu.png" alt="" class="parts_02">
-                        <img src="images/amatubu.png" alt="" class="parts_03">
-                        <img src="images/amatubu.png" alt="" class="parts_04">
-                        <img src="images/amatubu.png" alt="" class="parts_05">
-                        <img src="images/amatubu.png" alt="" class="parts_06">
-                        <img src="images/amatubu.png" alt="" class="parts_07">
-                        <img src="images/amatubu.png" alt="" class="parts_08">
-                        <img src="images/amatubu.png" alt="" class="parts_09">
-                        <img src="images/amatubu.png" alt="" class="parts_10">
-                        <img src="images/amatubu.png" alt="" class="parts_11">
-                        <img src="images/amatubu.png" alt="" class="parts_12">
-                        <img src="images/amatubu.png" alt="" class="parts_13">
-                        <img src="images/amatubu.png" alt="" class="parts_14">
-                        <img src="images/amatubu.png" alt="" class="parts_15">
-                        <img src="images/amatubu.png" alt="" class="parts_16">
-                        <img src="images/amatubu.png" alt="" class="parts_17">
-                        <img src="images/amatubu.png" alt="" class="parts_18">
-                        <img src="images/amatubu.png" alt="" class="parts_19">
+                <div id="sky">
+                </div>
+                    <div id="rain_block">
+                        <div class="rain_parts_box"></div>
                         <div id="ukanmuri"></div>
                     </div>
+                </div>
             </div>
         </div>
         <div class="control-container">
@@ -133,9 +116,9 @@
           </div>
             <div class="button-group">
                 <button id="cloudButton">雲</button>
-                <button id="startButton">雨</button>
-                <button onclick="showImages('ki')">日</button>
-                <button onclick="showImages('ki')">月</button>
+                <button id="rainButton">雨</button>
+                <button id="hiButton">日</button>
+                <button id="tukiButton">月</button>
             </div>
         </div>
         
