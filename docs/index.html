@@ -7,24 +7,32 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <title>象形文字で遊ぼう</title>
-
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
 </head>
 <body background="images/back.png">
     <header>
-        <a href="index.html"><img src="images/logo.png" alt="象形文字で遊ぼう" width="300px" height="auto"></a>
+        <a href="index.html"><img src="images/logo.png" alt="象形文字で遊ぼう" width="300" height="auto"></a>
         <div class="header-container">
-            <button id="prevButton" onclick="prevGroup()"><img src="images/left.png" width="50px" height="50px"></button>
+            <button id="prevButton" onclick="prevGroup()"><img src="images/left.png" width="50" height="50"></button>
             <h2 id="dynamic-title">背景画像を作ろう</h2>
-            <button id="nextButton" onclick="nextGroup()"><img src="images/right.png" width="50px" height="50px"></button>
+            <button id="nextButton" onclick="nextGroup()"><img src="images/right.png" width="50" height="50"></button>
+        </div>
+        <button>遊び方</button>
+        <div class="popup">
+            <div class="content">
+                <h1>遊び方</h1>
+                <p></p>
+                <button id="close">閉じる</button>
+            </div>
         </div>
     </header>
     <main>
         
         <div class="canvas-container">
             <div class="canvas" id="canvas" style="position: relative;">
-                <img src="images/canvas.png"width="800px" height="400px">
+                <img src="images/canvas.png"width="800" height="400">
                 <div class="image-container" id="yama-container"></div>
                 <div class="image-container" id="kawa-container"></div>
                 <div class="image-container" id="ta-container"></div>
@@ -47,38 +55,38 @@
                 <div id="yama-sliders" class="sliders">
                     <button onclick="showImages('yama')">山</button>
                     <p>倍率（横）：<span id="yama-scale-x">100%</span></p>
-                    <input id="yama-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="yama-resize-x" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>倍率（縦）：<span id="yama-scale-y">100%</span></p>
-                    <input id="yama-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="yama-resize-y" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>回転：<span id="yama-rotation">0°</span></p>
-                    <input id="yama-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                    <input id="yama-rotate" type="range" min="0" max="360" value="0" style="width:240;">
                 </div>
                 <div id="kawa-sliders" class="sliders">
                     <button onclick="showImages('kawa')">川</button>
                     <p>倍率（横）：<span id="kawa-scale-x">100%</span></p>
-                    <input id="kawa-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="kawa-resize-x" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>倍率（縦）：<span id="kawa-scale-y">100%</span></p>
-                    <input id="kawa-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="kawa-resize-y" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>回転：<span id="kawa-rotation">0°</span></p>
-                    <input id="kawa-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                    <input id="kawa-rotate" type="range" min="0" max="360" value="0" style="width:240;">
                 </div>
                 <div id="ta-sliders" class="sliders">
                     <button onclick="showImages('ta')">田</button>
                     <p>倍率（横）：<span id="ta-scale-x">100%</span></p>
-                    <input id="ta-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="ta-resize-x" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>倍率（縦）：<span id="ta-scale-y">100%</span></p>
-                    <input id="ta-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="ta-resize-y" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>回転：<span id="ta-rotation">0°</span></p>
-                    <input id="ta-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                    <input id="ta-rotate" type="range" min="0" max="360" value="0" style="width:240;">
                 </div>
                 <div id="ki-sliders" class="sliders">
                     <button onclick="showImages('ki')">木</button>
                     <p>倍率（横）：<span id="ki-scale-x">100%</span></p>
-                    <input id="ki-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="ki-resize-x" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>倍率（縦）：<span id="ki-scale-y">100%</span></p>
-                    <input id="ki-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="ki-resize-y" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>回転：<span id="ki-rotation">0°</span></p>
-                    <input id="ki-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                    <input id="ki-rotate" type="range" min="0" max="360" value="0" style="width:240;">
                 </div>
             </div>
         </div>
@@ -87,11 +95,11 @@
                     <div id="light1"><button onclick="showImages('musi')">虫</button></div>
                     <div id="switch1"></div>
                     <p>倍率（横）：<span id="musi-scale-x">100%</span></p>
-                    <input id="musi-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="musi-resize-x" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>倍率（縦）：<span id="musi-scale-y">100%</span></p>
-                    <input id="musi-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="musi-resize-y" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>回転：<span id="musi-rotation">0°</span></p>
-                    <input id="musi-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                    <input id="musi-rotate" type="range" min="0" max="360" value="0" style="width:240;">
                 </div>
              <div id="tori-sliders" class="sliders">
                 <div id="light2"><button onclick="showImages('tori')">鳥</button></div>
@@ -107,11 +115,11 @@
                     <div id="light3"><button onclick="showImages('sakana')">魚</button></div>
                     <div id="switch3"></div>
                     <p>倍率（横）：<span id="sakana-scale-x">100%</span></p>
-                    <input id="sakana-resize-x" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="sakana-resize-x" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>倍率（縦）：<span id="sakana-scale-y">100%</span></p>
-                    <input id="sakana-resize-y" type="range" min="20" max="300" value="100" style="width:240px;">
+                    <input id="sakana-resize-y" type="range" min="20" max="300" value="100" style="width:240;">
                     <p>回転：<span id="sakana-rotation">0°</span></p>
-                    <input id="sakana-rotate" type="range" min="0" max="360" value="0" style="width:240px;">
+                    <input id="sakana-rotate" type="range" min="0" max="360" value="0" style="width:240;">
                 </div>
           </div>
             <div class="button-group">
@@ -126,7 +134,7 @@
         </div>
     </main>
     <footer>
-        <img src="images/name.png" alt="作：たけさこほのか" width="150px" height="auto"></a>
+        <img src="images/name.png" alt="作：たけさこほのか" width="150" height="auto"></a>
     </footer>
 </body>
 </html>
