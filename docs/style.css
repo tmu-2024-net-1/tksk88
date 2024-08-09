@@ -1,6 +1,10 @@
 body{
     font-family: "ヒラギノ明朝 ProN","Hiragino Mincho ProN"; font-weight: bold;
 }
+p{
+    text-align: center;
+    margin: 1px;
+}
 header{
     padding: 20px;
     font-size: 20px;
@@ -24,6 +28,20 @@ header{
     left: 50%;
     transform: translateX(-50%); 
 }
+.sample-container {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    flex-wrap: wrap; 
+}
+
+.sample-img {
+    width: 250px; 
+    height: auto; 
+    margin: 10px; 
+}
+
+
 #prevButton {
     position: absolute;
     left: 10px; 
@@ -99,24 +117,46 @@ button:hover {
 
 .popup {
     display: none;
-    height: 100vh;
+    height: 100vh; 
     width: 100%;
-    background: black;
-    opacity: 0.7;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999; /* 最前面に表示 */
+    z-index: 9999;
+    overflow: auto;
+}
+
+.popup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); 
+    z-index: -1; 
 }
 
 .content {
-    background: #fff;
+    background: #fff; 
     padding: 30px;
-    width: 50%;
-    z-index: 10000; /* 最前面に表示 */
+    width: 80%; 
+    max-height: 80vh; 
+    margin: 0 auto; 
+    overflow-y: auto; 
+    box-sizing: border-box;
+    position: relative; 
 }
 
 
+.centered-video {
+    display: block;  
+    margin: 0 auto;  
+    width: 80%;      
+    max-width: 600px; 
+    height: auto;    
+
+}
 .show {
     display: flex;
     justify-content: center;

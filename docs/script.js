@@ -338,13 +338,30 @@ document.getElementById('tukiButton').addEventListener('click', function() {
     toggleImageOnCanvas('tuki');
 });
 
-$('button').on('click',function(){
-    $('.popup').addClass('show').fadeIn();
-});
-  
-$('#close').on('click',function(){
-    $('.popup').fadeOut();
+//ポップアップ
+const playButton = document.getElementById('playButton');
+const playPopup = document.getElementById('playPopup');
+const playClose = playPopup.querySelector('.close');
+
+playButton.addEventListener('click', () => {
+    playPopup.style.display = 'block';
 });
 
+playClose.addEventListener('click', () => {
+    playPopup.style.display = 'none';
+});
+
+// 作者紹介のポップアップ
+const authorButton = document.getElementById('authorButton');
+const authorPopup = document.getElementById('authorPopup');
+const authorClose = authorPopup.querySelector('.close');
+
+authorButton.addEventListener('click', () => {
+    authorPopup.style.display = 'block';
+});
+
+authorClose.addEventListener('click', () => {
+    authorPopup.style.display = 'none';
+});
 
 

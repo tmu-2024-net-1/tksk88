@@ -19,14 +19,31 @@
             <h2 id="dynamic-title">背景画像を作ろう</h2>
             <button id="nextButton" onclick="nextGroup()"><img src="images/right.png" width="50" height="50"></button>
         </div>
-        <button>遊び方</button>
-        <div class="popup">
-            <div class="content">
-                <h1>遊び方</h1>
-                <p></p>
-                <button id="close">閉じる</button>
-            </div>
+        <button id="playButton">遊び方</button>
+        <div class="popup" id="playPopup">
+    <div class="content">
+        <h2 style="text-align: center;">このサイトの遊び方（全画面推奨）</h2>
+        <p>まず背景を作成します</p>
+        <video class="centered-video" src="images/step1.mov" autoplay controls loop></video>
+        <p>次に動物を配置します</p>
+        <video class="centered-video" src="images/step2.mov" autoplay controls loop></video>
+        <p>最後にエフェクトを追加します</p>
+        <video class="centered-video" src="images/step3.mov" autoplay controls loop></video>
+        <h2 style="text-align: center;">作品例</h2>
+        <div class="sample-container">
+            <img src="images/sample1.png" alt="作品例1" class="sample-img">
+            <img src="images/sample2.png" alt="作品例2" class="sample-img">
+            <img src="images/sample3.png" alt="作品例3" class="sample-img">
         </div>
+        
+        
+        <h5 style="text-align: center;">作者：たけさこほのか<br>（杏仁豆腐と猫とアイドルとテーマパークが大好きな大学3年生です）</h5>
+        <button class="close">閉じる</button>
+    </div>
+</div>
+
+        
+
     </header>
     <main>
         
@@ -134,7 +151,7 @@
         </div>
     </main>
     <footer>
-        <img src="images/name.png" alt="作：たけさこほのか" width="150" height="auto"></a>
+        <img src="images/name.png" alt="作：たけさこほのか" width="150" height="auto">
     </footer>
 </body>
 </html>
